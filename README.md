@@ -3,8 +3,8 @@
 # How to download?
 i mean its pretty fuckin straight forward but for those that dont know how to use python (how the hell do u know whats an API):
 
-0.git clone https://github.com/turkishtutel/yt2mp3.ai-api**
-0.1. cd yt2mp3.-api
+A. git clone https://github.com/turkishtutel/yt2mp3.ai-api**
+B. cd yt2mp3.-api
 1. pip install requests
 2. python api.py
 

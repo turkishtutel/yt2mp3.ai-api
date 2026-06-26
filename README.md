@@ -116,7 +116,7 @@ def getDownloadAndProgress():
 
     data = r.json()
 
-    download_url = data.get("downloadURL") # you need this anyways
+    download_url = data.get("downloadURL") # you only need this anyways
     progress_url = data.get("progressURL")
 
     return download_url, progress_url

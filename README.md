@@ -15,11 +15,12 @@ and thats all ig
 ``` python
 # dont touch these
 TEST_VIDEO = input("Enter your youtube video ID (the thing after ?v=...): ")
-
+FORMAT = input('"mp3" or "mp4": ')
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
 ```
 ``` python
-def getDownloadAndProgress():
+# dont change anything
+def getDownload():
     ts = int(time.time() * 1000)
 
     convert_url = getConvertURL()
@@ -34,18 +35,27 @@ def getDownloadAndProgress():
     params = {
         "sig": sig,
         "v": TEST_VIDEO,
-        "f": "mp3", # change this to mp4 if you want .mp4 file format(all lowercase)
+        "f": FORMAT,
         "_": ts
     }
 
-    r = requests.get(convert_url, headers=headers, params=params)
+    # fuckers changed the API, now for mp3 i need to get redirectURL
+    if FORMAT.lower() == "mp3":
+        r1 = requests.get(convert_url, headers=headers, params=params)
+        data = r1.json()
+        redirect = data.get("redirectURL")
 
-    data = r.json()
+        r = requests.get(redirect, headers=headers)
+        data2 = r.json()
 
-    download_url = data.get("downloadURL")
-    progress_url = data.get("progressURL")
+        return data2.get("downloadURL")
+    elif FORMAT.lower() == "mp4":
+        r = requests.get(convert_url, headers=headers, params=params)
+        data = r.json()
 
-    return download_url, progress_url
+        download_url = data.get("downloadURL")
+        return download_url
+
 ```
 
 # How does it work? Every function explained apart
@@ -103,7 +113,7 @@ def getSig(url):
 
 ## Actually getting the Download API
 ``` python
-def getDownloadAndProgress():
+def getDownload():
     ts = int(time.time() * 1000)
 
     convert_url = getConvertURL()
@@ -115,28 +125,36 @@ def getDownloadAndProgress():
         "Referer": "https://yt2mp3.ai/"
     }
 
-    # parameters to authorize and get the downloadURL from the convertURL, since it probably returns something like
-    # { "downloadURL" : "https://...", "errors": 0, "progressURL": "https://...", "title": null }
     params = {
-        "sig": sig, # isnt optional
-        "v": TEST_VIDEO, #isnt optional either
-        "f": "mp3", # as i said, change to mp4 all lowercase if you want mp4 format instead
-        "_": ts # timestamp
+        "sig": sig,
+        "v": TEST_VIDEO,
+        "f": FORMAT,
+        "_": ts
     }
 
-    r = requests.get(convert_url, headers=headers, params=params) 
+    if FORMAT.lower() == "mp3":
+        r1 = requests.get(convert_url, headers=headers, params=params) # calls the convertURL
+        data = r1.json()
+        redirect = data.get("redirectURL") # gets the redirect URL inside the response
 
-    data = r.json()
+        r = requests.get(redirect, headers=headers) # then moves on to get the download url
+        data2 = r.json()
 
-    download_url = data.get("downloadURL") # you only need this anyways
-    progress_url = data.get("progressURL")
+        return data2.get("downloadURL")
+    elif FORMAT.lower() == "mp4":
+        r = requests.get(convert_url, headers=headers, params=params) # pretty straightforward, convert url -> download url
+        data = r.json()
 
-    return download_url, progress_url
+        download_url = data.get("downloadURL")
+        return download_url
+
 ```
 
 ## How to get the MP4/MP3?
 ``` python
-# PS: i have no idea on automatically but im showing you the link way
+# PS: add a 3 second delay before opening the URL like something like this
+
+time.sleep(3)
 print(download_url)
 ```
 

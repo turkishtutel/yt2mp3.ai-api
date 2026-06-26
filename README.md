@@ -1,4 +1,4 @@
-## The Download API for yt2mp3.ai
+# The Download API for yt2mp3.ai
 
 # How to download?
 i mean its pretty fuckin straight forward but for those that dont know how to use python (how the hell do u know whats an API):

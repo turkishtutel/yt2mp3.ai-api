@@ -23,7 +23,6 @@ def getKey():
     data = r.json()
     return data["key"]
 
-
 def getConvertURL():
     ts = int(time.time() * 1000)
 
@@ -42,12 +41,10 @@ def getConvertURL():
     data = r.json()
     return data["convertURL"]
 
-
 def getSig(url):
     parsed = urlparse(url)
     params = parse_qs(parsed.query)
     return params.get("sig", [None])[0]
-
 
 def getDownloadAndProgress():
     ts = int(time.time() * 1000)
@@ -76,16 +73,6 @@ def getDownloadAndProgress():
     progress_url = data.get("progressURL")
 
     return download_url, progress_url
-
-
-def download_file(url, filename="output.mp3"):
-    r = requests.get(url, stream=True)
-
-    with open(filename, "wb") as f:
-        for chunk in r.iter_content(chunk_size=8192):
-            if chunk:
-                f.write(chunk)
-
 
 durl, purl = getDownloadAndProgress()
 

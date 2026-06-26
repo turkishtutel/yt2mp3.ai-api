@@ -123,9 +123,8 @@ def getDownloadAndProgress():
 ```
 
 **How to get the MP4/MP3?**
-\nPS: i have no idea on automatically but im showing you the link way
-
 ``` python
+# PS: i have no idea on automatically but im showing you the link way
 print(download_url)
 ```
 

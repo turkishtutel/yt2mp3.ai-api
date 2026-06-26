@@ -1,4 +1,4 @@
-### The Download API for yt2mp3.ai
+## The Download API for yt2mp3.ai
 
 # How to use?
 
@@ -40,7 +40,7 @@ def getDownloadAndProgress():
 
 # How does it work? Every function explained apart
 
-**Getting the authorization key**
+## Getting the authorization key
 ``` python
 def getKey():
     ts = int(time.time() * 1000) # timestamp to prove non-botness
@@ -61,7 +61,8 @@ def getKey():
     data = r.json()
     return data["key"]
 ```
-**Getting the URL for conversion**
+
+## Getting the URL for conversion
 ``` python
 def getConvertURL():
     ts = int(time.time() * 1000)
@@ -82,14 +83,15 @@ def getConvertURL():
     return data["convertURL"]
 ```
 
-**Getting the ?sig=... from a url (for our case, from our convertURL)**
+## Getting the ?sig=... from a url (for our case, from our convertURL)
 ``` python
 def getSig(url):
     parsed = urlparse(url)
     params = parse_qs(parsed.query)
     return params.get("sig", [None])[0]
 ```
-**Actually getting the Download API**
+
+## Actually getting the Download API
 ``` python
 def getDownloadAndProgress():
     ts = int(time.time() * 1000)
@@ -122,7 +124,7 @@ def getDownloadAndProgress():
     return download_url, progress_url
 ```
 
-**How to get the MP4/MP3?**
+## How to get the MP4/MP3?
 ``` python
 # PS: i have no idea on automatically but im showing you the link way
 print(download_url)
@@ -130,4 +132,4 @@ print(download_url)
 
 # Can I use this? And call it mine?
 
-Yes and no, dont be a skid and call every project on github yours
+Yes and no, dont be a skid and call every project on github yours (you can call it yours if you actually contribute to this)

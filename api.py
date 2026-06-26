@@ -3,7 +3,7 @@ import time
 from urllib.parse import urlparse, parse_qs
 
 TEST_VIDEO = input("Enter your youtube video ID (the thing after ?v=...): ")
-
+FORMAT = input('"mp3" or "mp4": ')
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
 
 def getKey():
@@ -23,6 +23,7 @@ def getKey():
     data = r.json()
     return data["key"]
 
+
 def getConvertURL():
     ts = int(time.time() * 1000)
 
@@ -40,6 +41,7 @@ def getConvertURL():
 
     data = r.json()
     return data["convertURL"]
+
 
 def getSig(url):
     parsed = urlparse(url)
@@ -61,20 +63,28 @@ def getDownloadAndProgress():
     params = {
         "sig": sig,
         "v": TEST_VIDEO,
-        "f": "mp3",
+        "f": FORMAT,
         "_": ts
     }
 
-    r = requests.get(convert_url, headers=headers, params=params)
+    if FORMAT.lower() == "mp3":
+        r1 = requests.get(convert_url, headers=headers, params=params)
+        data = r1.json()
+        redirect = data.get("redirectURL")
 
-    data = r.json()
+        r = requests.get(redirect, headers=headers)
+        data2 = r.json()
 
-    download_url = data.get("downloadURL")
-    progress_url = data.get("progressURL")
+        return data2.get("downloadURL")
+    elif FORMAT.lower() == "mp4":
+        r = requests.get(convert_url, headers=headers, params=params)
+        data = r.json()
 
-    return download_url, progress_url
+        download_url = data.get("downloadURL")
+        return download_url
 
-durl, purl = getDownloadAndProgress()
+durl = getDownloadAndProgress()
 
+print("Wait for the progress to finish.. (3 seconds)")
+time.sleep(3)
 print("download:", durl)
-print("progress:", purl)
